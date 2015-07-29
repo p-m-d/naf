@@ -25,7 +25,7 @@ class App {
 			'error' => []
 		];
 		$params = compact('defaults', 'config');
-		return static::_filter(__FUNCTION__, $params, function($self, $params){
+		return static::filterStaticMethod(__FUNCTION__, $params, function($self, $params){
 			extract($params);
 			$config = Config::merge($defaults, $config);
 			Config::set(null, $config);
@@ -37,7 +37,7 @@ class App {
 	 *
 	 */
 	public static function startup() {
-		return static::_filter(__FUNCTION__, [], function($self){
+		return static::filterStaticMethod(__FUNCTION__, [], function($self){
 			register_shutdown_function([get_called_class(), 'shutdown']);
 		});
 	}
@@ -46,7 +46,7 @@ class App {
 	 *
 	 */
 	public static function shutdown() {
-		return static::_filter(__FUNCTION__, [], function(){});
+		return static::filterStaticMethod(__FUNCTION__, [], function(){});
 	}
 
 	/**
@@ -63,7 +63,7 @@ class App {
 		}
 		$type = $type ? strtolower($type) : $type;
 		$params = compact('name', 'type');
-		return static::_filter(__FUNCTION__, $params, function($self, $params){
+		return static::filterStaticMethod(__FUNCTION__, $params, function($self, $params){
 			extract($params);
 			if (isset($type, $self::$classPaths[$type])) {
 				foreach ($self::$classPaths[$type] as $path) {
